@@ -1,0 +1,154 @@
+<html>
+  <head>
+	<script>window.location.href = window.location.search.split('?')[1];</script>
+	<script type="text/javascript" src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+    <script type="text/javascript">
+      var html5VideoElement;
+      var websocketConnection;
+      var webrtcPeerConnection;
+      var webrtcConfiguration;
+      var reportError;
+	  var response;
+
+      function getLocalStream() {
+         var constraints = {"video":false,"audio":true};
+         if (navigator.mediaDevices.getUserMedia) {
+             return navigator.mediaDevices.getUserMedia(constraints);
+         }
+     }
+
+      function onLocalDescription(desc) {
+        console.log("Local description: " + JSON.stringify(desc));
+        webrtcPeerConnection.setLocalDescription(desc).then(function() {
+          websocketConnection.send(JSON.stringify({ type: "sdp", "data": webrtcPeerConnection.localDescription }));
+        }).catch(reportError);
+      }
+
+
+      function onIncomingSDP(sdp) {
+        console.log("Incoming SDP: " + JSON.stringify(sdp));
+        webrtcPeerConnection.setRemoteDescription(sdp).catch(reportError);
+        /* Send our video/audio to the other peer */
+        local_stream_promise = getLocalStream().then((stream) => {
+           console.log('Adding local stream');
+           webrtcPeerConnection.addStream(stream);
+           webrtcPeerConnection.createAnswer().then(onLocalDescription).catch(reportError);
+        });
+      }
+
+
+      function onIncomingICE(ice) {
+        var candidate = new RTCIceCandidate(ice);
+        console.log("Incoming ICE: " + JSON.stringify(ice));
+        webrtcPeerConnection.addIceCandidate(candidate).catch(reportError);
+      }
+
+
+      function onAddRemoteStream(event) {
+        html5VideoElement.srcObject = event.streams[0];
+      }
+
+
+      function onIceCandidate(event) {
+        if (event.candidate == null)
+          return;
+
+        console.log("Sending ICE candidate out: " + JSON.stringify(event.candidate));
+        websocketConnection.send(JSON.stringify({ "type": "ice", "data": event.candidate }));
+      }
+
+
+      function onServerMessage(event) {
+	    console.log(event.data);
+        var msg;
+
+        try {
+          msg = JSON.parse(event.data);
+        } catch (e) {
+		  console.error("not json!?");
+		  console.error(e.message);
+          return;
+        }
+
+        if (!webrtcPeerConnection) {
+          /* webrtcPeerConnection = new RTCPeerConnection(webrtcConfiguration); */
+          webrtcPeerConnection = new RTCPeerConnection({
+            iceServers: [{
+                urls: ["stun:us-turn4.xirsys.com"]
+            }, {
+               username: "_ZhsURT15pRg5yjNqO-FlJ8CES8s_Rk5UwtBzy8P_6Ap_BgRfepHY4t-IwAMZN6PAAAAAGJ2jFVuZXh0a2FzdA==",
+               credential : "17803fae-ce18-11ec-ba1e-0242ac140004",
+               urls : [
+                   "turn:us-turn4.xirsys.com:80?transport=udp",
+					"turn:us-turn4.xirsys.com:3478?transport=udp",
+                   "turn:us-turn4.xirsys.com:80?transport=tcp",
+                   "turn:us-turn4.xirsys.com:3478?transport=tcp",
+                   "turns:us-turn4.xirsys.com:443?transport=tcp",
+                   "turns:us-turn4.xirsys.com:5349?transport=tcp"
+               ]
+            }]
+          }); 
+          webrtcPeerConnection.ontrack = onAddRemoteStream;
+          webrtcPeerConnection.onicecandidate = onIceCandidate;
+        }
+
+        switch (msg.type) {
+          case "sdp": onIncomingSDP(msg.data); break;
+          case "ice": onIncomingICE(msg.data); break;
+		  //case "golive": onIncomingGoLive(msg.data); break;
+          default:	document.getElementById('data').textContent = event.data;
+					break;
+        }
+      }
+
+      //function onIncomingGoLive(golive) {
+	  //  // console.log(JSON.stringify(golive));
+	  //  console.log(golive.data);
+	  //  const div = document.getElementById('data');
+	  //  div.textContent = golive.data;
+	  //}
+
+	  function golive_cmd(text) {
+		// websocketConnection.send(JSON.stringify({ type: "golive", "data": { type: "msg", "data": text} }));
+		websocketConnection.send(JSON.stringify({ type: "golive", "data": { type: "cmd", "data": text} }));
+	  }
+
+      function playStream(videoElement, hostname, port, path, configuration, reportErrorCB) {
+        var l = window.location;
+        var wsHost = (hostname != undefined) ? hostname : l.hostname;
+        var wsPort = (port != undefined) ? port : l.port;
+        var wsPath = (path != undefined) ? path : "ws";
+        if (wsPort) 
+          wsPort = ":" + wsPort; 
+        var wsUrl = "wss://" + wsHost + wsPort + "/" + wsPath;
+
+        html5VideoElement = videoElement;
+        webrtcConfiguration = configuration;
+        reportError = (reportErrorCB != undefined) ? reportErrorCB : function(text) {};
+
+        websocketConnection = new WebSocket(wsUrl);
+        websocketConnection.addEventListener("message", onServerMessage);
+      }
+      
+      window.onload = function() {
+        var vidstream = document.getElementById("stream");
+        var config = { 'iceServers': [{ 'urls': 'stun:not.necessary.but.text.required:12345' }] }; 
+        playStream(vidstream, null, null, null, config, function (errmsg) { console.error(errmsg); });
+      };
+
+    </script>
+  </head>
+
+  <body>
+    <div>
+      <audio id="stream" controls autoplay>Your browser does not support audio</audio>
+    </div>	
+	<div><button onclick="golive_cmd('RequestData')">RequestData</button></div>
+	<div><button onclick="golive_cmd('NextStart')">NextStart</button></div>
+	<div><button onclick="golive_cmd('MicOn')">MicOn</button></div>
+	<div><button onclick="golive_cmd('MicOff')">MicOff</button></div>
+	<div><button onclick="golive_cmd('AutoOn')">AutoOn</button></div>
+	<div><button onclick="golive_cmd('AutoOff')">AutoOff</button></div>
+	<div id="data"></div>
+  </body>
+</html>

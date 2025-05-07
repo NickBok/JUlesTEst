@@ -1,0 +1,27 @@
+
+1. Install the latest mobileVT BX version from https://www.nextkast.com/MobileVT/nextKastBXSetup.exe
+
+2. After install go to Windows firewall and make sure  c:/nkmanager.exe are on the list for both private and public as exceptions
+
+3. Open nkManager and right click the mobilevt button
+
+4. double click on a gray area in the new mobileVT server window and answer ok to both config setup options ( this automatically creates the config files)
+
+5. Close the MobileVT server window and turn MobileVT button off and then back on
+
+6. If mobileVT is green and when you right click on button the status butttons on window should show (Proxy on) and (Server Started)
+
+7. last step is to test on local machine open web broswer and then type in the local ip like this: 'https://192.168.1.1'
+
+8. If the mobileVT app displays you are now ready to set up port forwarding
+
+9. per your internet router instructions port forward the following to your localIP, local ip can be found on the mobileVT server window
+	port forward 443 to your local ip	
+	port forwar 80 to your local ip
+	port forward 8080 to your local ip
+	
+	restart router.
+	
+10. You can now test MobileVT by logging into any web browser to your public ip address found on mobilevt server window or even use the QR code
+
+
