@@ -6,14 +6,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="index.css" />
-  <link rel="stylesheet" href="pikaday.css" />
-  <!-- <link rel="icon" href="favicon.ico" /> -->
+  <link rel="stylesheet" href="css/index.css" />
+  <link rel="stylesheet" href="lib/ui/pikaday.css" />
+  <!-- <link rel="icon" href="assets/images/favicon.ico" /> -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-  <script src="vumeter.js"></script>
+  <script src="js/audio/vumeter.js"></script>
   <script>
     var scriptprocessor = false;
     var eqset1 = 1;
@@ -121,7 +121,7 @@
     var recordstate = "stop";
 
     Mp3LameEncoderConfig = {
-      memoryInitializerPrefixURL: "./" // must end with slash
+      memoryInitializerPrefixURL: "./lib/audio/" // must end with slash
       // => changed to javascripts/Mp3LameEncoder.min.js.mem
     };
 
@@ -227,7 +227,7 @@
     <div style="flex: 0 1 53px; background: rgb(190, 190, 190); text-align: center; font-size: 25px; font-weight: 500; border: 4px solid black; ">
 		  
       <div style="font-size: 25px; cursor: pointer; border: 3px solid black; margin: 10px 0 0 10px; width: 75px; text-align: center; float: left;" onclick="openMenu()">menu</div>									   
-      <img src="nextkast.png" alt="Italian Trulli" style="float: right; width: 52px; height: 52px; margin: 5px;" onclick="toggleEditMode()">
+      <img src="assets/images/nextkast.png" alt="Italian Trulli" style="float: right; width: 52px; height: 52px; margin: 5px;" onclick="toggleEditMode()">
       <div id="goLiveState" style="margin: auto; display: flex; float: right;">
         <img id="goLiveStateIcon" src="" style="float: center;" onclick="location.reload(true)" ;>
 		<div style="font-size: 4vw; line-height: 53px;" id="subject" onInput="RequestDayAndHour('subject')" >NextKast MobileVT</div>
@@ -321,40 +321,40 @@
 	
 	  		<!--///wp golive 10/22-->
 	<div id="bottomNavigation" style="display: flex; width: 100%; background-color: rgb(22, 22, 22); color:white; align-self: flex-start; align-items: flex-start; padding: 13px; display: none;">
-		<button id="insertNewTrack" class="menuButton" onclick="insertNewTrack()"><img src="newtrack.png">Library</button>
-		<button id="jumptomenu" class="menuButton" onclick="jumptotrack()"><img src="jumpto.png">Jump to</button>
-		<button id="deletemenu" class="menuButton" onclick="deleteitem()"><img src="delete.png">Delete item</button>	
-		<button class="menuButton" onclick="importVT()"><img src="import.png">Edit/Import Hour</button>
-		<button class="menuButton" onclick="exportVT()"><img src="export.png">Export Hour</button>
-		<button class="menuButton" onclick="showsample()"><img src="sampleButtons.png">Sample Buttons</button>
-		<button id="webrtcmenu" class="menuButton" onclick="webrtc()"><img src="live120.png" width=60px height=30px>GOLive</button>
+		<button id="insertNewTrack" class="menuButton" onclick="insertNewTrack()"><img src="assets/images/newtrack.png">Library</button>
+		<button id="jumptomenu" class="menuButton" onclick="jumptotrack()"><img src="assets/images/jumpto.png">Jump to</button>
+		<button id="deletemenu" class="menuButton" onclick="deleteitem()"><img src="assets/images/delete.png">Delete item</button>	
+		<button class="menuButton" onclick="importVT()"><img src="assets/images/import.png">Edit/Import Hour</button>
+		<button class="menuButton" onclick="exportVT()"><img src="assets/images/export.png">Export Hour</button>
+		<button class="menuButton" onclick="showsample()"><img src="assets/images/sampleButtons.png">Sample Buttons</button>
+		<button id="webrtcmenu" class="menuButton" onclick="webrtc()"><img src="assets/images/live120.png" width=60px height=30px>GOLive</button>
 	</div>
 	
   </div>
   
   <div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closeNavBtn" onclick="closeMenu()">&times;</a>
-    <a href="javascript:void(0)" onclick="importVT()">ImportVT Job &nbsp;&nbsp;<img src="import.png"
+    <a href="javascript:void(0)" onclick="importVT()">ImportVT Job &nbsp;&nbsp;<img src="assets/images/import.png"
         alt="Italian Trulli" style="width: 30px; height: 30px;"></a>
-    <a href="javascript:void(0)" onclick="exportVT()">ExportVT Job &nbsp;&nbsp;<img src="export.png"
+    <a href="javascript:void(0)" onclick="exportVT()">ExportVT Job &nbsp;&nbsp;<img src="assets/images/export.png"
         alt="Italian Trulli" style="width: 30px; height: 30px;"></a>
-    <a href="javascript:void(0)" onclick="importSelection()">VT Mode &nbsp;&nbsp;<img src="mode.png"
+    <a href="javascript:void(0)" onclick="importSelection()">VT Mode &nbsp;&nbsp;<img src="assets/images/mode.png"
         alt="Italian Trulli" style="width: 30px; height: 30px;"></a>
-    <!-- <a href="javascript:void(0)" onclick="exportSelection()">ExportVT Mode &nbsp;&nbsp;<img src="mode.png" alt="Italian Trulli" style="width: 30px; height: 30px;"></a> -->
-    <a href="javascript:void(0)" onclick="micsetting()">Mic Settings &nbsp;&nbsp;<img src="mic.png" alt="Italian Trulli"
+    <!-- <a href="javascript:void(0)" onclick="exportSelection()">ExportVT Mode &nbsp;&nbsp;<img src="assets/images/mode.png" alt="Italian Trulli" style="width: 30px; height: 30px;"></a> -->
+    <a href="javascript:void(0)" onclick="micsetting()">Mic Settings &nbsp;&nbsp;<img src="assets/images/mic.png" alt="Italian Trulli"
         style="width: 30px; height: 30px;"></a>
-    <a href="javascript:void(0)" onclick="showsample()">Show Sample Buttons &nbsp;&nbsp;<img src="sampleButtons.png"
+    <a href="javascript:void(0)" onclick="showsample()">Show Sample Buttons &nbsp;&nbsp;<img src="assets/images/sampleButtons.png"
         alt="Italian Trulli" style="width: 30px; height: 30px;"></a>
-    <a href="javascript:void(0)" onclick="deleteitem()" id="deletemenu">Delete Track or Sample &nbsp;&nbsp;<img src="delete.png"
+    <a href="javascript:void(0)" onclick="deleteitem()" id="deletemenu">Delete Track or Sample &nbsp;&nbsp;<img src="assets/images/delete.png"
         alt="Italian Trulli" style="width: 30px; height: 30px;"></a>
     <a href="javascript:void(0)" onclick="insertNewTrack()" id="deletemenu">Library &nbsp;&nbsp;<img
-        src="newtrack.png" alt="Italian Trulli" style="width: 30px; height: 30px;"></a>
-    <a href="javascript:void(0)" onclick="jumptotrack()" id="jumptomenu">Jump To &nbsp;&nbsp;<img src="jumpto.png"
+        src="assets/images/newtrack.png" alt="Italian Trulli" style="width: 30px; height: 30px;"></a>
+    <a href="javascript:void(0)" onclick="jumptotrack()" id="jumptomenu">Jump To &nbsp;&nbsp;<img src="assets/images/jumpto.png"
       alt="" style="width: 30px; height: 30px;"></a>
-	<a href="javascript:void(0)" onclick="webrtc()" id="webrtcmenu">goLive &nbsp;&nbsp;<img src="live120.png"
+	<a href="javascript:void(0)" onclick="webrtc()" id="webrtcmenu">goLive &nbsp;&nbsp;<img src="assets/images/live120.png"
       alt="goLive" style="width: 60px; height: 30px;"></a>
 	
-	<a href="javascript:void(0)" onclick="importTrack()">Upload New Track &nbsp;&nbsp;<img src="upload.png" alt="Upload new File to Station" style="width: 30px; height: 30px;"></a>
+	<a href="javascript:void(0)" onclick="importTrack()">Upload New Track &nbsp;&nbsp;<img src="assets/images/upload.png" alt="Upload new File to Station" style="width: 30px; height: 30px;"></a>
 		
 	  <br>
 	  <br>
@@ -689,24 +689,24 @@
   <script>
 
   </script>
-  <script src="jszip.js"></script>
-  <script src="WebAudioRecorder.min.js"></script>
-  <script src="waveformengine.js"></script>
-  <script src="eventmanager.js"></script>
-  <script src="micdialog.js"></script>
-  <script src="audiometer.js"></script>
-  <script src="volumecontrol.js"></script>
-  <script src="time.js"></script>
-  <script src="importVTzip.js"></script>
-  <script src="metareader.js"></script>
-  <script src="encoding-indexes.js"></script>
-  <script src="encoding.js"></script>
-  <script src="browser-id3-writer.min.js"></script>
-  <script src="connectiondialog.js"></script>
+  <script src="lib/utils/jszip.js"></script>
+  <script src="lib/audio/WebAudioRecorder.min.js"></script>
+  <script src="js/core/waveformengine.js"></script>
+  <script src="js/core/eventmanager.js"></script>
+  <script src="js/ui/micdialog.js"></script>
+  <script src="js/audio/audiometer.js"></script>
+  <script src="js/audio/volumecontrol.js"></script>
+  <script src="js/core/time.js"></script>
+  <script src="js/import/importVTzip.js"></script>
+  <script src="js/utils/metareader.js"></script>
+  <script src="lib/encoding/encoding-indexes.js"></script>
+  <script src="lib/encoding/encoding.js"></script>
+  <script src="lib/utils/browser-id3-writer.min.js"></script>
+  <script src="js/ui/connectiondialog.js"></script>
   <script src="sample.js"></script>
-  <script src="pikaday.js"></script>
+  <script src="lib/ui/pikaday.js"></script>
   <script src="masterlibrary.js"></script>
-  <script src="importTrack.js"></script> <!--11/22 WP -->
+  <script src="js/import/importTrack.js"></script> <!--11/22 WP -->
   
   <script>
     var extractedFile;
