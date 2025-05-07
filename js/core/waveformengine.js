@@ -3316,9 +3316,9 @@ var WaveformPlaylist =
 					if (recordstate != "recording") return
 					canvasContext.clearRect(0, 0, meterW * 1.6, 200/*meterH*/)
 					if (this.checkClipping()) {
-						canvasContext.fillStyle = "Maroon"
+						canvasContext.fillStyle = "OrangeRed" ///05/10/23
 					} else {
-						canvasContext.fillStyle = "SeaGreen"				
+						canvasContext.fillStyle = "GreenYellow"				
 					}
 					canvasContext.fillRect(0, 0, this._volume * meterW * 1.6 /*5*/, 200/*meterH*/)
 				}

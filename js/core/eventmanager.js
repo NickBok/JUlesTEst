@@ -166,17 +166,28 @@ ee2.on("loaded", function(duration) {
 
   curTrackLengthSeconds2 = duration;
   var canvasdiv = document.getElementById("form2");
-  canvasdiv.innerText = curTrackName2 + "  ---  " + getHMS(curTrackLengthSeconds2);
+  canvasdiv.innerText = curTrackName2 + "  ---  " + getHMS(curTrackLengthSeconds2);  
   canvasdiv.style.fontSize = "2.2vh";
+  playbackSeconds2 = 0; ///07/2023/WP
   //canvasdiv.innerText += "\n";
   //canvasdiv.innerText += getHMS(curTrackLengthSeconds2);
 });
 
 ee2.on("timeupdate", function(sec) {
+	
+  playbackSeconds2 = sec;	 ///06/28/2023
+	
   var canvasdiv = document.getElementById("form2");
-  canvasdiv.innerText = curTrackName2 + "  ---  " + getHMS(sec);
-  //canvasdiv.innerText += "\n";
-  //canvasdiv.innerText += getHMS(sec);
+  
+  //08/29/23 WP
+  if (introTime2 > 0 && sec < introTime2)
+	{
+	  canvasdiv.innerText = getHMS(introTime2 - sec) + " :INTRO " + curTrackName2;
+	}
+	else
+	{
+		canvasdiv.innerText = curTrackName2 + "  ---  " + getHMS(sec);
+	}
 });
 
 ee3.on("timeupdate", function(sec) {
@@ -223,7 +234,7 @@ ee3.on("voicetrackblob", function(mp3file) {
   
   ParsePLS(extractedFile);
   listUpdateState = false;
-  SaveExtractedFileToIndexDB(false);
+  SaveExtractedFileToIndexDB(false);  
   
   // console.log("receive", mp3file, extractedFile);
 });

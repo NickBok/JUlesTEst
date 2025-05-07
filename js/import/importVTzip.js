@@ -571,7 +571,8 @@ function getVoiceTrackName() {
   var tmp = curTrackName1.slice(0, curTrackName1.lastIndexOf("-")).replaceAll(" ", "+").replaceAll("/", "+");
   var today = new Date();
   var time = pad2(today.getMinutes()) + pad2(today.getSeconds());
-  var newname = "VoiceTrack-" + "+" + tmp + time + "+" + localStorage.username + ".mp3"; //added username 031323 08/31/23 removed fileDate
+  var formattedDate = `${String(globalDate.getMonth() + 1).padStart(2, '0')}${String(globalDate.getDate()).padStart(2, '0')}${String(globalDate.getFullYear()).slice(-2)}`; //wp 030825 
+  var newname = "VoiceTrack-" + formattedDate + "+" + tmp + time + "+" + localStorage.username + ".mp3"; //added username 031323 08/31/23 removed fileDate
   return newname;
 }
 
