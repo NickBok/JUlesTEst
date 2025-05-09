@@ -52,25 +52,32 @@ function logError(err) {
   console.error(err);
 }
 
-playlist1 = WaveformPlaylist.init({
-  samplesPerPixel: 5000,
-  waveHeight: 40,//document.getElementById("curform").clientHeight + 2,
-  container: document.getElementById("curform"),
-  state: 'cursor',
-  colors: {
-    waveOutlineColor: 'black',
-    timeColor: 'red',
-    fadeColor: 'black'
-  },
-  timescale: true,
-  controls: {
-    show: false, //whether or not to include the track controls
-    width: 200 //width of controls in pixels
-  },
-  seekStyle : 'line',
-  zoomLevels: [500, 1000, 3000, 5000],
-  waveWidth: document.getElementById("curform").clientWidth  
-});
+playlist1 = WaveSurfer.create({
+  container: '#curform',
+  waveColor: '#4F4A85',
+  progressColor: '#383351',
+  url: '/audio.mp3',
+})
+
+//     WaveformPlaylist.init({
+//   samplesPerPixel: 5000,
+//   waveHeight: 40,//document.getElementById("curform").clientHeight + 2,
+//   container: document.getElementById("curform"),
+//   state: 'cursor',
+//   colors: {
+//     waveOutlineColor: 'black',
+//     timeColor: 'red',
+//     fadeColor: 'black'
+//   },
+//   timescale: true,
+//   controls: {
+//     show: false, //whether or not to include the track controls
+//     width: 200 //width of controls in pixels
+//   },
+//   seekStyle : 'line',
+//   zoomLevels: [500, 1000, 3000, 5000],
+//   waveWidth: document.getElementById("curform").clientWidth
+// });
 
 playlist2 = WaveformPlaylist.init({
   samplesPerPixel: 5000,
