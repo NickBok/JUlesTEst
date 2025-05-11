@@ -54,8 +54,39 @@ function logError(err) {
   console.error(err);
 }
 
-let playlist1x = WaveSurfer.create({
+playlist1 = WaveSurfer.create({
   container: '#curform',
+  waveColor: '#FF4A85',
+  progressColor: '#F83351',
+  cursorColor: '#28f351',
+  height: 40,
+  responsive: true,
+  waveWidth: document.getElementById("curform").clientWidth
+  // url: "https://wavesurfer.xyz/wavesurfer-code/examples/audio/demo.wav"
+})
+
+// playlist1x =  WaveformPlaylist.init({
+//   samplesPerPixel: 5000,
+//   waveHeight: 40,//document.getElementById("curform").clientHeight + 2,
+//   container: document.getElementById("curformx"),
+//   state: 'cursor',
+//   colors: {
+//     waveOutlineColor: 'black',
+//     timeColor: 'red',
+//     fadeColor: 'black'
+//   },
+//   timescale: true,
+//   controls: {
+//     show: false, //whether or not to include the track controls
+//     width: 200 //width of controls in pixels
+//   },
+//   seekStyle : 'line',
+//   zoomLevels: [500, 1000, 3000, 5000],
+//   waveWidth: document.getElementById("curformx").clientWidth
+// });
+
+playlist2 = WaveSurfer.create({
+  container: '#nextform',
   waveColor: '#FF4A85',
   progressColor: '#F83351',
   cursorColor: '#28f351',
@@ -63,78 +94,67 @@ let playlist1x = WaveSurfer.create({
   responsive: true,
   waveWidth: document.getElementById("nextform").clientWidth
   // url: "https://wavesurfer.xyz/wavesurfer-code/examples/audio/demo.wav"
-})
-
-playlist1 =  WaveformPlaylist.init({
-  samplesPerPixel: 5000,
-  waveHeight: 40,//document.getElementById("curform").clientHeight + 2,
-  container: document.getElementById("curformx"),
-  state: 'cursor',
-  colors: {
-    waveOutlineColor: 'black',
-    timeColor: 'red',
-    fadeColor: 'black'
-  },
-  timescale: true,
-  controls: {
-    show: false, //whether or not to include the track controls
-    width: 200 //width of controls in pixels
-  },
-  seekStyle : 'line',
-  zoomLevels: [500, 1000, 3000, 5000],
-  waveWidth: document.getElementById("curformx").clientWidth
 });
+//     WaveformPlaylist.init({
+//   samplesPerPixel: 5000,
+//   waveHeight: 40,//document.getElementById("nextform").clientHeight + 2,
+//   container: document.getElementById("nextform"),
+//   state: 'cursor',
+//   colors: {
+//     waveOutlineColor: 'black',
+//     timeColor: 'red',
+//     fadeColor: 'black'
+//   },
+//   timescale: true,
+//   controls: {
+//     show: false, //whether or not to include the track controls
+//     width: 200 //width of controls in pixels
+//   },
+//   seekStyle : 'line',
+//   zoomLevels: [500, 1000, 3000, 5000],
+//   waveWidth: document.getElementById("nextform").clientWidth
+// });
 
-playlist2 = WaveformPlaylist.init({
-  samplesPerPixel: 5000,
-  waveHeight: 40,//document.getElementById("nextform").clientHeight + 2,
-  container: document.getElementById("nextform"),
-  state: 'cursor',
-  colors: {
-    waveOutlineColor: 'black',
-    timeColor: 'red',
-    fadeColor: 'black'
-  },
-  timescale: true,
-  controls: {
-    show: false, //whether or not to include the track controls
-    width: 200 //width of controls in pixels
-  },
-  seekStyle : 'line',
-  zoomLevels: [500, 1000, 3000, 5000],
-  waveWidth: document.getElementById("nextform").clientWidth
+playlist3 =WaveSurfer.create({
+  container: '#recordform',
+  waveColor: '#FF4A85',
+  progressColor: '#F83351',
+  cursorColor: '#28f351',
+  height: 34,
+  responsive: true,
+  waveWidth: document.getElementById("recordform").clientWidth
+  // url: "https://wavesurfer.xyz/wavesurfer-code/examples/audio/demo.wav"
 });
+//     WaveformPlaylist.init({
+//   samplesPerPixel: 5000,
+//   waveHeight: 34,//document.getElementById("recordform").clientHeight,
+//   container: document.getElementById("recordform"),
+//   state: 'cursor',
+//   colors: {
+//     waveOutlineColor: 'black',
+//     timeColor: 'red',
+//     fadeColor: 'black'
+//   },
+//   timescale: true,
+//   controls: {
+//     show: false, //whether or not to include the track controls
+//     width: 200 //width of controls in pixels
+//   },
+//   seekStyle : 'line',
+//   zoomLevels: [500, 1000, 3000, 5000],
+//   waveWidth: 288//document.getElementById("recordform").clientWidth
+// });
 
-playlist3 = WaveformPlaylist.init({
-  samplesPerPixel: 5000,
-  waveHeight: 34,//document.getElementById("recordform").clientHeight,
-  container: document.getElementById("recordform"),
-  state: 'cursor',
-  colors: {
-    waveOutlineColor: 'black',
-    timeColor: 'red',
-    fadeColor: 'black'
-  },
-  timescale: true,
-  controls: {
-    show: false, //whether or not to include the track controls
-    width: 200 //width of controls in pixels
-  },
-  seekStyle : 'line',
-  zoomLevels: [500, 1000, 3000, 5000],
-  waveWidth: 288//document.getElementById("recordform").clientWidth
-});
+var ee1 = playlist1;
+var ee2 = playlist2;
+var ee3 = playlist3;
+// var eeNew = playlist1x;
 
-var ee1 = playlist1.getEventEmitter();
-var ee2 = playlist2.getEventEmitter();
-var ee3 = playlist3.getEventEmitter();
-var eeNew = playlist1x;
-
-ee1.on("loaded", function(duration) {
+ee1.on("ready", function(duration) {
   locked1 = false;
   var canvas = document.getElementById("curform").getElementsByTagName("canvas")[0];
   canvas.addEventListener("mousedown", function( event ) {
-    ee1.emit("seek", event.offsetX);
+    ee1.seekTo(event.offsetX);
   }, false);
 
   curTrackLengthSeconds1 = duration;
@@ -145,9 +165,9 @@ ee1.on("loaded", function(duration) {
   //canvasdiv.innerText += getHMS(curTrackLengthSeconds1);
 });
 
-ee1.on("finished", function() {
+ee1.on("finish", function() {
   if (recordstate === "playing" && vtStart === 10000)
-    ee3.emit("play");
+    ee3.play();
 });
 
 ee1.on("timeupdate", function(sec) {
@@ -155,9 +175,9 @@ ee1.on("timeupdate", function(sec) {
 
   if (playbackSeconds1 > vtStart && recordstate === "playing" && voiceTrackState === false) {
     voiceTrackState = true;
-    ee3.emit("play");
-	ee1.emit("mastervolumechange", 100 - ducking); ///WP 11/22
-	ee2.emit("mastervolumechange", 100 - ducking); ///WP 11/22
+    ee3.play();
+	ee1.setVolume((100 - ducking)/100); ///WP 11/22
+	ee2.setVolume((100 - ducking)/100); ///WP 11/22
   }
 
   // if (playbackSeconds1 > vtStart + leftTrackKeepTime && recordstate === "playing") {
@@ -171,11 +191,11 @@ ee1.on("timeupdate", function(sec) {
   //canvasdiv.innerText += getHMS(curTrackLengthSeconds1 - playbackSeconds1);
 });
 
-ee2.on("loaded", function(duration) {
+ee2.on("ready", function(duration) {
   locked2 = false;
   var canvas = document.getElementById("nextform").getElementsByTagName("canvas")[0];
   canvas.addEventListener("mousedown", function( event ) {
-    ee2.emit("seek", event.offsetX);
+    ee2.seekTo(event.offsetX);
   }, false);
 
   curTrackLengthSeconds2 = duration;
@@ -208,16 +228,16 @@ ee3.on("timeupdate", function(sec) {
   voicetrackPlaySecond = sec;
   if (voicetrackPlaySecond > nextstart && recordstate === "playing" && rightTrackState === false) {
     rightTrackState = true;
-    ee2.emit("play");	
+    ee2.play();
 
-    var curvolume = localStorage.miclevel || 80;
+    var curvolume = localStorage.miclevel || 0.8;
     var fadeAudio = setInterval(function () {
         if (curvolume > 0) {
           curvolume -= 20;
-          ee1.emit("mastervolumechange", curvolume);
+          ee1.setVolume(curvolume);
         } else {
-          ee1.emit("stop");
-          ee1.emit("mastervolumechange", 100);
+          ee1.stop();
+          ee1.setVolume(1);
           clearInterval(fadeAudio);
         }
     }, /*400*/fadetime * 1000 / 5);
@@ -253,11 +273,11 @@ ee3.on("voicetrackblob", function(mp3file) {
   // console.log("receive", mp3file, extractedFile);
 });
 
-ee3.on("loaded", function(duration) {
+ee3.on("ready", function(duration) {
   listUpdateState = false;
   var canvas = document.getElementById("recordform").getElementsByTagName("canvas")[0];
   canvas.addEventListener("mousedown", function( event ) {
-    ee3.emit("seek", event.offsetX);
+    ee3.seekTo(event.offsetX);
   }, false);
 
   curVoiceTrackLengthSecond = duration;
@@ -267,10 +287,10 @@ ee3.on("loaded", function(duration) {
   // canvasdiv.innerText += getHMS(curTrackLengthSeconds2);
 });
 
-ee3.on("finished", function() {
-  ee2.emit("mastervolumechange", 100); ///WP 11/22
+ee3.on("finish", function() {
+  ee2.setVolume(1); ///WP 11/22
   if (vtStart === 10000)
-    ee2.emit("play");
+    ee2.play();
 });
 
 ee3.on("audiometer", function(meter) {

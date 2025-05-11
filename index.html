@@ -222,7 +222,6 @@
 </head>
 
 <body>
-<div id="curformx" style="height: 200px;width: 200px;"></div>
   <div class="flex-box">
 
     <div style="flex: 0 1 53px; background: rgb(190, 190, 190); text-align: center; font-size: 25px; font-weight: 500; border: 4px solid black; ">
@@ -1036,9 +1035,12 @@
 		}
 		
         //removed WP they dont exist	
-        ee1.emit("removeTrack", curMp3name1);
-        ee2.emit("removeTrack", curMp3name2);
-        ee3.emit("clear");
+        // ee1.emit("removeTrack", curMp3name1);
+        // ee2.emit("removeTrack", curMp3name2);
+        // ee3.emit("clear");
+          ee1.load('')
+          ee2.load('')
+          ee3.load('')
 
         if (playstate == true) {
           play();
@@ -1216,9 +1218,7 @@
               type: "audio"
             });
               let bUrl = URL.createObjectURL(blb_content)
-              eeNew.load(bUrl).then(
-                  eeNew.play()
-              )
+              ee1.load(bUrl);
             ee1.emit("newtrack", blb_content, curMp3name1, document.getElementById("curform").clientWidth);
             getMetaData(content, ee1);
           });
@@ -1231,6 +1231,8 @@
             var blb_content = new Blob([content], {
               type: "audio"
             });
+              let bUrl = URL.createObjectURL(blb_content)
+              ee2.load(bUrl);
             ee2.emit("newtrack", blb_content, curMp3name2, document.getElementById("nextform").clientWidth);
             getMetaData(content, ee2);
           });
@@ -1260,9 +1262,9 @@
           startTime = vtStart - 2; ///08/31/23 reduced from 10
         if (startTime < 0)
           startTime = 0;
-        ee1.emit("play", startTime);
-        ee1.emit("mastervolumechange", 100);
-        ee3.emit("mastervolumechange", 100);
+        ee1.play(startTime);
+        ee1.setVolume(1);
+        ee3.setVolume(1);
       } else {
         btn.classList.remove("stop-btn");
         btn.classList.add("play-btn");
@@ -1270,9 +1272,9 @@
         playstate = false;
         rightTrackState = false;
         voiceTrackState = false;
-        ee1.emit("stop");
-        ee2.emit("stop");
-        ee3.emit("stop");
+        ee1.stop();
+        ee2.stop();
+        ee3.stop();
         markNextStartClikced = false;
 		
 		///added to stop recording WP goLive
@@ -1307,8 +1309,8 @@
           ee1.emit("markvtstart", vtStart);
         }
         // console.log("record started");
-        ee1.emit("mastervolumechange", 100 - ducking);
-        ee3.emit("mastervolumechange", 100 - ducking);
+        ee1.setVolume((100 - ducking)/100);
+        ee3.setVolume((100 - ducking)/100);
 		
       } else if (recordstate == "recording") {
 	  
@@ -1325,7 +1327,7 @@
         recform.style.display = "inline-flex";
         recform.style.bottom = "18px";
         recform.addEventListener("mousedown", function (event) {
-          ee3.emit("seek", event.offsetX);
+          ee3.seekTo(event.offsetX);
         }, false);
 
         if (vtStart == 10000)
@@ -1347,23 +1349,23 @@
 		///////////////	
 		
         ee3.emit("setvtstartandnext", vtStart, nextstart);
-        ee2.emit("stop");
+        ee2.stop();
         recordstate = "playing";			
 
         if (playstate == true) {
-          ee1.emit("stop");
+          ee1.stop();
 
           var startTime = vtStart - 2; ///08/31/23 reduced from 10
           if (startTime < 0)
             startTime = 0;
-          ee1.emit("play", startTime);
+          ee1.play(startTime);
         }
         // else
         //   play();
 
         markNextStartClikced = false;
-        ee1.emit("mastervolumechange", 100);
-        ee3.emit("mastervolumechange", 100);		
+        ee1.setVolume(1);
+        ee3.setVolume(1);
 
 		
       } else if (recordstate == "playing") {
@@ -1411,15 +1413,15 @@
 
           if (curvolume > 0) {
             curvolume -= 20;
-            ee1.emit("mastervolumechange", curvolume);
+            ee1.setVolume(curvolume / 100);
           } else {
-            ee1.emit("stop");
-            ee1.emit("mastervolumechange", 100);
+            ee1.stop();
+            ee1.setVolume(1);
             clearInterval(fadeAudio);
           }
         }, /*400*/ fadetime * 1000 / 5);
 
-        ee2.emit("play");
+        ee2.play();
       }
 
       if (recordstate === "playing") {
@@ -1513,15 +1515,15 @@
 	///06/28/2023 WP
 	///07/2023/WP
 	function goToMark(){	
-		ee3.emit("mastervolumechange", 0);
+		ee3.setVolume(0);
 		if (playbackSeconds2 == 0) {			
-		    ee2.emit("play");			
+		    ee2.play();
 		 }
 	}
 		
 	function newMarkToIntro(){		
 		//ee2.emit("seek" , intromark);
-		ee3.emit("mastervolumechange", 100);		
+		ee3.setVolume(1);
 		if(playlist3.duration > playbackSeconds2) ///08/31/23
 		{
 			intromark =  playbackSeconds2;
@@ -1536,10 +1538,10 @@
 		markNextStartClikced = false;
 		rightTrackState = false;
 		recordstate = "playing";						
-		ee1.emit("stop");
-        ee2.emit("stop");
-        ee3.emit("stop");
-		ee3.emit("play" , nextstart-.5);			
+		ee1.stop();
+        ee2.stop();
+        ee3.stop();
+		ee3.play(nextstart-.5);
 		
 	}
 	///06/28/2023 WP
@@ -1558,9 +1560,9 @@
         play();
 
       //WP clear all so no stray memory exist 
-      ee1.emit('clear');
-      ee2.emit('clear');
-      ee3.emit('clear');   
+      ee1.load('');
+      ee2.load('');
+      ee3.load('');
       
 	 //032423	
  	  return true;	

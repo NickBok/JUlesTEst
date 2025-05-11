@@ -26,7 +26,7 @@ function importTrack(category = '') {
 
 closediv.addEventListener('click', function (event) {
   importDialog.style.display = "none";
-  editWaveFormEvent.emit("clear");
+  editWaveFormEvent.load('');
   if (goLiveState == true)//032423 WP ==
   {
 	  var vidstream = document.getElementById("stream");
@@ -34,28 +34,39 @@ closediv.addEventListener('click', function (event) {
   }
 });
 
-importPlayer = WaveformPlaylist.init({
-  samplesPerPixel: 5000,
-  waveHeight: 200, //document.getElementById("newImportTrack").clientHeight + 2,
-  container: document.getElementById("newImportTrack"),
-  state: 'cursor',
-  colors: {
-    waveOutlineColor: 'black',
-    timeColor: 'red',
-    fadeColor: 'black'
-  },
-  timescale: true,
-  controls: {
-    show: false, //whether or not to include the track controls
-    width: 200 //width of controls in pixels
-  },
-  seekStyle : 'line',
-  zoomLevels: [500, 1000, 3000, 5000],
-  waveWidth: document.getElementById("newImportTrack").clientWidth  
+importPlayer = WaveSurfer.create({
+	container: '#newImportTrack',
+	waveColor: '#FF4A85',
+	progressColor: '#F83351',
+	cursorColor: '#28f351',
+	height: 200,
+	responsive: true,
+	waveWidth: document.getElementById("newImportTrack").clientWidth
+	// url: "https://wavesurfer.xyz/wavesurfer-code/examples/audio/demo.wav"
 });
 
+// 	WaveformPlaylist.init({
+//   samplesPerPixel: 5000,
+//   waveHeight: 200, //document.getElementById("newImportTrack").clientHeight + 2,
+//   container: document.getElementById("newImportTrack"),
+//   state: 'cursor',
+//   colors: {
+//     waveOutlineColor: 'black',
+//     timeColor: 'red',
+//     fadeColor: 'black'
+//   },
+//   timescale: true,
+//   controls: {
+//     show: false, //whether or not to include the track controls
+//     width: 200 //width of controls in pixels
+//   },
+//   seekStyle : 'line',
+//   zoomLevels: [500, 1000, 3000, 5000],
+//   waveWidth: document.getElementById("newImportTrack").clientWidth
+// });
 
-var editWaveFormEvent = importPlayer.getEventEmitter();
+
+var editWaveFormEvent = importPlayer;
 
 function selectTrack(){
 	clearImportPlayer();
@@ -79,8 +90,8 @@ function selectTrack(){
 
 function clearImportPlayer(){
 	
-		editWaveFormEvent.emit("removeTrack", importTrackName);
-		editWaveFormEvent.emit("clear");
+		// editWaveFormEvent.emit("removeTrack", importTrackName);
+		editWaveFormEvent.load('');
 		
 		var btn = document.getElementById("importNextStartBtn");
 		importNextStartMark =0;
