@@ -10,7 +10,9 @@ function gotStream(stream) {
   userMediaStream = stream;
   var compressionChk = document.getElementById("compression");
   var eqChk = document.getElementById("eqsettings");
-  playlist3.initRecorder(userMediaStream, compressionChk.checked, eqChk.checked, eqset1, eqset2, eqset3, eqset4, eqset5);
+  //TODO: replace instance
+  // playlist3.initRecorder(userMediaStream, compressionChk.checked, eqChk.checked, eqset1, eqset2, eqset3, eqset4, eqset5);
+
   var spinprogress = document.getElementById("spinprogress");			
   spinprogress.style.display = "none";
   // $(".btn-record").removeClass("disabled");
@@ -52,32 +54,36 @@ function logError(err) {
   console.error(err);
 }
 
-playlist1 = WaveSurfer.create({
+let playlist1x = WaveSurfer.create({
   container: '#curform',
-  waveColor: '#4F4A85',
-  progressColor: '#383351',
-  url: '/audio.mp3',
+  waveColor: '#FF4A85',
+  progressColor: '#F83351',
+  cursorColor: '#28f351',
+  height: 40,
+  responsive: true,
+  waveWidth: document.getElementById("nextform").clientWidth
+  // url: "https://wavesurfer.xyz/wavesurfer-code/examples/audio/demo.wav"
 })
 
-//     WaveformPlaylist.init({
-//   samplesPerPixel: 5000,
-//   waveHeight: 40,//document.getElementById("curform").clientHeight + 2,
-//   container: document.getElementById("curform"),
-//   state: 'cursor',
-//   colors: {
-//     waveOutlineColor: 'black',
-//     timeColor: 'red',
-//     fadeColor: 'black'
-//   },
-//   timescale: true,
-//   controls: {
-//     show: false, //whether or not to include the track controls
-//     width: 200 //width of controls in pixels
-//   },
-//   seekStyle : 'line',
-//   zoomLevels: [500, 1000, 3000, 5000],
-//   waveWidth: document.getElementById("curform").clientWidth
-// });
+playlist1 =  WaveformPlaylist.init({
+  samplesPerPixel: 5000,
+  waveHeight: 40,//document.getElementById("curform").clientHeight + 2,
+  container: document.getElementById("curformx"),
+  state: 'cursor',
+  colors: {
+    waveOutlineColor: 'black',
+    timeColor: 'red',
+    fadeColor: 'black'
+  },
+  timescale: true,
+  controls: {
+    show: false, //whether or not to include the track controls
+    width: 200 //width of controls in pixels
+  },
+  seekStyle : 'line',
+  zoomLevels: [500, 1000, 3000, 5000],
+  waveWidth: document.getElementById("curformx").clientWidth
+});
 
 playlist2 = WaveformPlaylist.init({
   samplesPerPixel: 5000,
@@ -122,6 +128,7 @@ playlist3 = WaveformPlaylist.init({
 var ee1 = playlist1.getEventEmitter();
 var ee2 = playlist2.getEventEmitter();
 var ee3 = playlist3.getEventEmitter();
+var eeNew = playlist1x;
 
 ee1.on("loaded", function(duration) {
   locked1 = false;

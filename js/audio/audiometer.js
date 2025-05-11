@@ -40,7 +40,7 @@ if (!scriptprocessor) {
 		}
 		ctx.fillRect(0, 0, average * 100 , height)
 	}
-	globalAudioContext.audioWorklet.addModule('vumeter-worklet-processor.js').then(()=>{
+	globalAudioContext.audioWorklet.addModule('js/audio/vumeter-worklet-processor.js').then(()=>{
 		vumeterWorkletProcessor = new AudioWorkletNode(
 			globalAudioContext,
 			'vumeter-worklet-processor'

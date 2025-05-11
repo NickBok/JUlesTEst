@@ -7,12 +7,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/index.css" />
-  <link rel="stylesheet" href="lib/ui/pikaday.css" />
+  <link rel="stylesheet" href="css/pikaday.css" />
   <!-- <link rel="icon" href="assets/images/favicon.ico" /> -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="js/lib/jquery.min.js"></script>
+  <script src="js/lib/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+  <script type="text/javascript" src="js/lib/adapter-latest.js"></script>
   <script src="js/audio/vumeter.js"></script>
   <script>
     var scriptprocessor = false;
@@ -222,6 +222,7 @@
 </head>
 
 <body>
+<div id="curformx" style="height: 200px;width: 200px;"></div>
   <div class="flex-box">
 
     <div style="flex: 0 1 53px; background: rgb(190, 190, 190); text-align: center; font-size: 25px; font-weight: 500; border: 4px solid black; ">
@@ -692,6 +693,7 @@
   <script src="lib/utils/jszip.js"></script>
   <script src="lib/audio/WebAudioRecorder.min.js"></script>
   <script src="js/core/waveformengine.js"></script>
+  <script src="js/core/wavesurfer.min.js"></script>
   <script src="js/core/eventmanager.js"></script>
   <script src="js/ui/micdialog.js"></script>
   <script src="js/audio/audiometer.js"></script>
@@ -1151,6 +1153,7 @@
               var blb_content = new Blob([content], {
                 type: "audio"
               });
+
               ee3.emit("newtrack", blb_content, curVoiceTrackFile, document.getElementById("recordform")
                 .clientWidth);
               getMetaData(content, ee3);
@@ -1212,10 +1215,12 @@
             var blb_content = new Blob([content], {
               type: "audio"
             });
+              let bUrl = URL.createObjectURL(blb_content)
+              eeNew.load(bUrl).then(
+                  eeNew.play()
+              )
             ee1.emit("newtrack", blb_content, curMp3name1, document.getElementById("curform").clientWidth);
             getMetaData(content, ee1);
-            // ee1.emit("markvtstart", vtStart);
-            // console.log("sent newtrack", document.getElementById("curform").clientWidth);
           });
         }
 
