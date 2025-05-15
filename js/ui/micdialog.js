@@ -12,7 +12,7 @@ function micsetting() {
     //ee3.emit("micvolumechange", localStorage.miclevel);
   }
 }
-
+var fadetime = 2;
 var fadeElement = document.getElementById("tentacles");
 fadeElement.value = fadetime;
 

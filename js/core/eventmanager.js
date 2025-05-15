@@ -1,3 +1,4 @@
+
 var userMediaStream;
 var playlist1, playlist2;
 
@@ -53,6 +54,8 @@ function startUserMedia(deviceID) {
 function logError(err) {
   console.error(err);
 }
+// Initialize the Regions plugin
+const regions = WaveSurfer.Regions.create();
 
 playlist1 = WaveSurfer.create({
   container: '#curform',
@@ -61,7 +64,10 @@ playlist1 = WaveSurfer.create({
   cursorColor: '#28f351',
   height: 40,
   responsive: true,
-  waveWidth: document.getElementById("curform").clientWidth
+  waveWidth: document.getElementById("curform").clientWidth,
+  plugins: [
+    regions, // Enable regions plugin
+  ],
   // url: "https://wavesurfer.xyz/wavesurfer-code/examples/audio/demo.wav"
 })
 
@@ -92,7 +98,10 @@ playlist2 = WaveSurfer.create({
   cursorColor: '#28f351',
   height: 40,
   responsive: true,
-  waveWidth: document.getElementById("nextform").clientWidth
+  waveWidth: document.getElementById("nextform").clientWidth,
+  plugins: [
+    regions, // Enable regions plugin
+  ],
   // url: "https://wavesurfer.xyz/wavesurfer-code/examples/audio/demo.wav"
 });
 //     WaveformPlaylist.init({
@@ -122,7 +131,10 @@ playlist3 =WaveSurfer.create({
   cursorColor: '#28f351',
   height: 34,
   responsive: true,
-  waveWidth: document.getElementById("recordform").clientWidth
+  waveWidth: 288,//document.getElementById("recordform").clientWidth,
+  plugins: [
+    regions, // Enable regions plugin
+  ],
   // url: "https://wavesurfer.xyz/wavesurfer-code/examples/audio/demo.wav"
 });
 //     WaveformPlaylist.init({
@@ -150,12 +162,18 @@ var ee2 = playlist2;
 var ee3 = playlist3;
 // var eeNew = playlist1x;
 
+// ee1.on('click', (relativeX) => {
+//   console.log(relativeX)
+//   ee1.seekTo(relativeX/100);
+// })
 ee1.on("ready", function(duration) {
   locked1 = false;
-  var canvas = document.getElementById("curform").getElementsByTagName("canvas")[0];
-  canvas.addEventListener("mousedown", function( event ) {
-    ee1.seekTo(event.offsetX);
-  }, false);
+  //todo: handle navigate on click
+
+  // var canvas = document.getElementById("curform").getElementsByTagName("canvas")[0];
+  // canvas.addEventListener("mousedown", function( event ) {
+  //   ee1.seekTo(event.offsetX);
+  // }, false);
 
   curTrackLengthSeconds1 = duration;
   var canvasdiv = document.getElementById("form1");
@@ -176,8 +194,8 @@ ee1.on("timeupdate", function(sec) {
   if (playbackSeconds1 > vtStart && recordstate === "playing" && voiceTrackState === false) {
     voiceTrackState = true;
     ee3.play();
-	ee1.setVolume((100 - ducking)/100); ///WP 11/22
-	ee2.setVolume((100 - ducking)/100); ///WP 11/22
+	ee1.setVolume(validatePercent100(100 - ducking)); ///WP 11/22
+	ee2.setVolume(validatePercent100(100 - ducking)); ///WP 11/22
   }
 
   // if (playbackSeconds1 > vtStart + leftTrackKeepTime && recordstate === "playing") {
@@ -191,12 +209,17 @@ ee1.on("timeupdate", function(sec) {
   //canvasdiv.innerText += getHMS(curTrackLengthSeconds1 - playbackSeconds1);
 });
 
+// ee2.on('click', (relativeX) => {
+//   console.log(relativeX)
+//   ee2.seekTo(relativeX);
+// })
+
 ee2.on("ready", function(duration) {
   locked2 = false;
-  var canvas = document.getElementById("nextform").getElementsByTagName("canvas")[0];
-  canvas.addEventListener("mousedown", function( event ) {
-    ee2.seekTo(event.offsetX);
-  }, false);
+  // var canvas = document.getElementById("nextform").getElementsByTagName("canvas")[0];
+  // canvas.addEventListener("mousedown", function( event ) {
+  //   ee2.seekTo(event.offsetX);
+  // }, false);
 
   curTrackLengthSeconds2 = duration;
   var canvasdiv = document.getElementById("form2");
@@ -273,12 +296,17 @@ ee3.on("voicetrackblob", function(mp3file) {
   // console.log("receive", mp3file, extractedFile);
 });
 
+// ee3.on('click', (relativeX) => {
+//   console.log(relativeX)
+//   ee3.seekTo(relativeX / 100);
+// })
+
 ee3.on("ready", function(duration) {
   listUpdateState = false;
-  var canvas = document.getElementById("recordform").getElementsByTagName("canvas")[0];
-  canvas.addEventListener("mousedown", function( event ) {
-    ee3.seekTo(event.offsetX);
-  }, false);
+  // var canvas = document.getElementById("recordform").getElementsByTagName("canvas")[0];
+  // canvas.addEventListener("mousedown", function( event ) {
+  //   ee3.seekTo(event.offsetX);
+  // }, false);
 
   curVoiceTrackLengthSecond = duration;
   // var canvasdiv = document.getElementById("form2");
