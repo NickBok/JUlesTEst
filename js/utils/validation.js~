@@ -1,3 +1,0 @@
-function validatePercent100(num) {
-    return Math.min(1, num)
-}
