@@ -530,12 +530,12 @@ function RowClicked(e) {
         }
 
         //removed WP they dont exist
-        removeTrack(curMp3name1);
-        removeTrack(curMp3name2);
+
+
         // ee3.emit("clear");
-        ee1.load('')
-        ee2.load('')
-        ee3.load('')
+        ee1.removeTrack(curMp3name1);
+        ee2.removeTrack(curMp3name2);
+        ee3.empty()
 
         if (playstate == true) {
             play();
@@ -792,7 +792,7 @@ function recordstart(btn) {
         timerID = setInterval(recording_time, 100, btn);
         recordstate = "recording";
         // mediaRecorder.start();
-        ee3.emit("record");
+        ee3.record();
         if (playstate === true) {
             vtStart = playbackSeconds1;
             ee1.emit("markvtstart", vtStart);
@@ -966,8 +966,8 @@ function resetmark() {
                 var blb_content = new Blob([content], {type: "audio"});
                 let bUrl = URL.createObjectURL(blb_content)
                 ee1.load(bUrl);
-                // ee1.emit("newtrack", blb_content, curMp3name1, document.getElementById("curform").clientWidth);
-                // getMetaData(content, ee1);
+                ee1.emit("newtrack", blb_content, curMp3name1, document.getElementById("curform").clientWidth);
+                getMetaData(content, ee1);
                 // // ee1.emit("markvtstart", vtStart);
                 // // console.log("sent newtrack", document.getElementById("curform").clientWidth);
             });
@@ -1051,9 +1051,9 @@ function closebtnClicked() {
         play();
 
     //WP clear all so no stray memory exist
-    ee1.load('');
-    ee2.load('');
-    ee3.load('');
+    ee1.removeTrack(curMp3name1);
+    ee2.removeTrack(curMp3name2);
+    ee3.empty();
 
     //032423
     return true;
@@ -1762,37 +1762,4 @@ target.addEventListener("drop", (event) => {
 
 });
 
-function removeTrack(fname) {
-    // console.log("in removetrack", this, fname);
-    //   if (fname === "Recording" && this.mediaRecorder.state === "recording")
-    // 	this.mediaRecorder.stop();
-    if (fname === "Recording")
-        this.mp3Recorder.finishRecording();
 
-    var trackLists = [this.mutedTracks, this.soloedTracks, this.collapsedTracks, this.tracks];
-    trackLists.forEach(function (list) {
-        list.forEach(function (item) {
-            if (item.name == fname) {
-                if (item.isPlaying()) {
-                    item.scheduleStop();
-                }
-                var index = list.indexOf(item);
-                if (index > -1) {
-                    list.splice(index, 1);
-                }
-            }
-        });
-    });
-
-    //   if (track.isPlaying()) {
-    //     track.scheduleStop();
-    //   }
-
-    //   var trackLists = [this.mutedTracks, this.soloedTracks, this.collapsedTracks, this.tracks];
-    //   trackLists.forEach(function (list) {
-    //     var index = list.indexOf(track);
-    //     if (index > -1) {
-    //       list.splice(index, 1);
-    //     }
-    //   });
-}

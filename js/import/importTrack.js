@@ -34,7 +34,7 @@ closediv.addEventListener('click', function (event) {
   }
 });
 
-importPlayer = WaveSurfer.create({
+importPlayer = RecordWaveSurfer.create({
 	container: '#newImportTrack',
 	waveColor: '#FF4A85',
 	progressColor: '#F83351',

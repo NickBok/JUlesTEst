@@ -342,6 +342,8 @@ function RequestTracks(mp3File1, mp3File2) {
             extractedFile.file("Music/Tracks/" + mp3File1, content);
             SaveExtractedFileToIndexDB(false);
             var blb_content = new Blob([content], { type: "audio" });
+            let bUrl = URL.createObjectURL(blb_content)
+            ee1.load(bUrl);
             ee1.emit("newtrack", blb_content, mp3File1, document.getElementById("curform").clientWidth);
             getMetaData(content, ee1);
           });
@@ -353,6 +355,8 @@ function RequestTracks(mp3File1, mp3File2) {
             extractedFile.file("Music/Tracks/" + mp3File2, content);
             SaveExtractedFileToIndexDB(false);
             var blb_content = new Blob([content], { type: "audio" });
+            let bUrl = URL.createObjectURL(blb_content)
+            ee2.load(bUrl);
             ee2.emit("newtrack", blb_content, mp3File2, document.getElementById("nextform").clientWidth);
             getMetaData(content, ee2);
           });

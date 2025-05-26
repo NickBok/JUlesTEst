@@ -11,8 +11,8 @@ function gotStream(stream) {
   userMediaStream = stream;
   var compressionChk = document.getElementById("compression");
   var eqChk = document.getElementById("eqsettings");
-  //TODO: replace instance
-  // playlist3.initRecorder(userMediaStream, compressionChk.checked, eqChk.checked, eqset1, eqset2, eqset3, eqset4, eqset5);
+
+  playlist3.initRecorder(userMediaStream, compressionChk.checked, eqChk.checked, eqset1, eqset2, eqset3, eqset4, eqset5);
 
   var spinprogress = document.getElementById("spinprogress");			
   spinprogress.style.display = "none";
@@ -54,10 +54,17 @@ function startUserMedia(deviceID) {
 function logError(err) {
   console.error(err);
 }
-// Initialize the Regions plugin
+let scrollingWaveform = false
+let continuousWaveform = true
+// Initialize the plugins
 const regions = WaveSurfer.Regions.create();
+const record = WaveSurfer.Record.create(
+    false,
+    scrollingWaveform,
+    continuousWaveform,
+    30);
 
-playlist1 = WaveSurfer.create({
+playlist1 = new RecordWaveSurfer({
   container: '#curform',
   waveColor: '#FF4A85',
   progressColor: '#F83351',
@@ -66,7 +73,7 @@ playlist1 = WaveSurfer.create({
   responsive: true,
   waveWidth: document.getElementById("curform").clientWidth,
   plugins: [
-    regions, // Enable regions plugin
+    regions
   ],
   // url: "https://wavesurfer.xyz/wavesurfer-code/examples/audio/demo.wav"
 })
@@ -91,7 +98,7 @@ playlist1 = WaveSurfer.create({
 //   waveWidth: document.getElementById("curformx").clientWidth
 // });
 
-playlist2 = WaveSurfer.create({
+playlist2 = new RecordWaveSurfer({
   container: '#nextform',
   waveColor: '#FF4A85',
   progressColor: '#F83351',
@@ -101,6 +108,7 @@ playlist2 = WaveSurfer.create({
   waveWidth: document.getElementById("nextform").clientWidth,
   plugins: [
     regions, // Enable regions plugin
+    record
   ],
   // url: "https://wavesurfer.xyz/wavesurfer-code/examples/audio/demo.wav"
 });
@@ -124,7 +132,7 @@ playlist2 = WaveSurfer.create({
 //   waveWidth: document.getElementById("nextform").clientWidth
 // });
 
-playlist3 =WaveSurfer.create({
+playlist3 =new RecordWaveSurfer({
   container: '#recordform',
   waveColor: '#FF4A85',
   progressColor: '#F83351',
