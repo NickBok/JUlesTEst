@@ -585,26 +585,38 @@
 
     </div>
 </div>
+<!-- Library scripts (these should generally come first) -->
+<script src="js/lib/jquery.min.js"></script>
+<script src="js/lib/popper.min.js"></script>
+<script src="lib/bootstrap/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/lib/adapter-latest.js"></script>
+<script src="js/utils/validation.js"></script> <!-- Utility, likely few deps -->
+<script src="js/audio/vumeter.js"></script> <!-- Utility, likely few deps -->
+<script src="lib/ui/pikaday.js"></script>
+
+<!-- CORE INITIALIZATION SCRIPT -->
+<script src="js/startupScript.js"></script>
+
+<!-- Wavesurfer and its plugins -->
 <script src="js/core/wavesurfer.min.js"></script>
 <script src="js/core/wavesurfer/plugins/wavesurfer.regions.min.js"></script>
-<script src="js/core/wavesurfer/plugins/wavesurfer.record.min.js"></script>
+<script src="js/core/wavesurfer/plugins/wavesurfer.record.min.js"></script> <!-- This is likely the WaveSurfer record plugin, not RecordMic.js -->
+
+<!-- Audio Worklets/Processors -->
 <script src="js/audio/vtvumeterworklet.js"></script>
-<script src="js/audio/recorder-host.js"></script>
-<script src="js/audio/RecordMic.js"></script>
-<script src="js/core/eventmanager.js"></script>
-<script src="js/startupScript.js"></script>
-<script src="js/ui/micdialog.js"></script>
-<!-- New Track Import code 11/22 WP -->
-<script src="js/audio/volumecontrol.js"></script>
+<!-- <script src="lib/audio/record-worklet-processor.js"></script>  // Already commented out in original index.html -->
 
+<!-- Application Logic using WaveSurfer and globals from startupScript -->
+<script src="js/audio/RecordMic.js"></script> <!-- Extends WaveSurfer, uses globals -->
+<script src="js/core/eventmanager.js"></script> <!-- Uses globals, instances from RecordMic -->
+<script src="js/ui/micdialog.js"></script> <!-- Uses globals, triggers eventmanager -->
+<script src="js/audio/volumecontrol.js"></script> <!-- Uses globals, interacts with micdialog UI -->
+
+<!-- Other utilities and modules -->
 <script src="lib/utils/jszip.js"></script>
-<script src="lib/audio/WebAudioRecorder.min.js"></script>
-<!--<script src="js/core/waveformengine.js"></script>-->
-
-
-
+<script src="lib/audio/WebAudioRecorder.min.js"></script> <!-- MP3 Recorder library -->
+<!--<script src="js/core/waveformengine.js"></script>--> <!-- Already commented out -->
 <script src="js/audio/audiometer.js"></script>
-
 <script src="js/core/time.js"></script>
 <script src="js/import/importVTzip.js"></script>
 <script src="js/utils/metareader.js"></script>
@@ -613,9 +625,8 @@
 <script src="lib/utils/browser-id3-writer.min.js"></script>
 <script src="js/ui/connectiondialog.js"></script>
 <script src="js/sample.js"></script>
-
 <script src="js/masterlibrary.js"></script>
-<script src="js/import/importTrack.js"></script> <!--11/22 WP -->
+<script src="js/import/importTrack.js"></script>
 
 
 </body>

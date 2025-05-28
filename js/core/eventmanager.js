@@ -1,6 +1,7 @@
 
 var userMediaStream;
 var playlist1, playlist2;
+let recorderSuccessfullyInitialized = false; // Initialization flag
 
 navigator.getUserMedia = (navigator.getUserMedia ||
     navigator.webkitGetUserMedia ||
@@ -8,11 +9,27 @@ navigator.getUserMedia = (navigator.getUserMedia ||
     navigator.msGetUserMedia);
 
 function gotStream(stream) {
+  if (recorderSuccessfullyInitialized) {
+    console.warn("EventManager: gotStream called, but recorder is already successfully initialized. Skipping playlist3.initRecorder().");
+    userMediaStream = stream; // Keep updating the stream reference if needed elsewhere
+    // Hide spinner if it was shown by a redundant call path
+    var existingSpinProgress = document.getElementById("spinprogress");
+    if (existingSpinProgress) existingSpinProgress.style.display = "none";
+    return;
+  }
   userMediaStream = stream;
   var compressionChk = document.getElementById("compression");
   var eqChk = document.getElementById("eqsettings");
 
+  console.log("EventManager/gotStream: Immediately before initRecorder call - eqset1 type:", typeof eqset1, "value:", eqset1);
+  console.log("EventManager/gotStream: Immediately before initRecorder call - eqset2 type:", typeof eqset2, "value:", eqset2);
+  console.log("EventManager/gotStream: Immediately before initRecorder call - eqset3 type:", typeof eqset3, "value:", eqset3);
+  console.log("EventManager/gotStream: Immediately before initRecorder call - eqset4 type:", typeof eqset4, "value:", eqset4);
+  console.log("EventManager/gotStream: Immediately before initRecorder call - eqset5 type:", typeof eqset5, "value:", eqset5);
   playlist3.initRecorder(userMediaStream, compressionChk.checked, eqChk.checked, eqset1, eqset2, eqset3, eqset4, eqset5);
+
+  console.log("EventManager: Recorder initialized successfully via gotStream.");
+  recorderSuccessfullyInitialized = true;
 
   var spinprogress = document.getElementById("spinprogress");
   spinprogress.style.display = "none";
@@ -23,6 +40,12 @@ function gotStream(stream) {
 function startUserMedia(deviceID) {
   // CONSTRAINTS INITIALIZED AS WINDOW VARIABLE IN INDEX.HTML SO THEY APPLY TO ALL AUDIO CAPTURE
   // var constraints;
+  console.log("EventManager/startUserMedia: Before getUserMedia call - eqset1 type:", typeof eqset1, "value:", eqset1);
+  console.log("EventManager/startUserMedia: Before getUserMedia call - eqset2 type:", typeof eqset2, "value:", eqset2);
+  console.log("EventManager/startUserMedia: Before getUserMedia call - eqset3 type:", typeof eqset3, "value:", eqset3);
+  console.log("EventManager/startUserMedia: Before getUserMedia call - eqset4 type:", typeof eqset4, "value:", eqset4);
+  console.log("EventManager/startUserMedia: Before getUserMedia call - eqset5 type:", typeof eqset5, "value:", eqset5);
+
   if (deviceID == "" || deviceID == undefined)
     ;// constraints = {audio: true};
   else {
@@ -323,46 +346,6 @@ ee3.on("ready", function(duration) {
   // canvasdiv.innerText += getHMS(curTrackLengthSeconds2);
 });
 
-ee3.on('audioprocess_finished_ui_reset', function() {
-  console.log("EventManager: UI reset for playlist3 (ee3) after recording completion and waveform ready.");
-
-  var recordButton = document.getElementById("recordbtn");
-  var recordLabel = document.getElementById("recordlabel");
-  var playButton = document.getElementById("playbtn"); // Play button for the recorded segment
-  var vtProcessButton = document.getElementById("vtbtn");
-  var recordFormDiv = document.getElementById("recordform");
-
-
-  if (recordstate == "playing") { // This means recording had finished and was processed
-    if (recordButton) {
-      recordButton.classList.remove("recordstop-btn");
-      recordButton.classList.add("recordstart-btn");
-      recordButton.style.display = ""; // Make record button visible again
-    }
-    if (recordLabel) {
-      recordLabel.classList.remove("recordlabel");
-      recordLabel.innerHTML = "Press HERE to Record Voice Track";
-    }
-
-    if (recordFormDiv) {
-      recordFormDiv.style.display = "none"; // Hide the waveform of the recording
-    }
-
-    if (playButton) {
-      playButton.style.display = "inline-block"; // Show play button for the new VT
-    }
-    if (vtProcessButton) {
-      vtProcessButton.style.display = "none"; // Hide the "Start VT Process" button
-    }
-
-    recordstate = "stop"; // Reset global record state
-  }
-
-  // Potentially re-enable other buttons if they were disabled during recording
-  // e.g., if playButton for main tracks (ee1, ee2) were disabled.
-  // For now, focusing on the elements directly related to the recording process area.
-});
-
 ee3.on("finish", function() {
   ee2.setVolume(1); ///WP 11/22
   if (vtStart === 10000)
@@ -403,3 +386,87 @@ localStorageWorker_func = function() {
 localStorageWorker = localStorageWorker_func.toString().trim().match(
     /^function\s*\w*\s*\([\w\s,]*\)\s*{([\w\W]*?)}$/
 )[1];
+
+// --- Part 2: Add Event Listeners for EQ Slider Updates ---
+// This code should run after playlist3 (ee3) is initialized.
+// playlist3 is ee3 as per the variables ee1, ee2, ee3 declared below.
+if (playlist3 && typeof playlist3.on === 'function') {
+  console.log("EventManager: Setting up listeners for eqsettingX events on playlist3 (ee3)...");
+
+  playlist3.on('eqsetting1', function(value) {
+    const numericValue = parseFloat(value);
+    if (isFinite(numericValue)) {
+      if (typeof eqset1 !== 'undefined') { // Check if global var exists
+        eqset1 = numericValue;
+        localStorage.setItem('eqset1', eqset1.toString());
+        console.log("EventManager: Global eqset1 updated to:", eqset1);
+      } else {
+        console.warn("EventManager: Global eqset1 not found.");
+      }
+    } else {
+      console.warn("EventManager: Received non-finite value for eqsetting1 event:", value);
+    }
+  });
+
+  playlist3.on('eqsetting2', function(value) {
+    const numericValue = parseFloat(value);
+    if (isFinite(numericValue)) {
+      if (typeof eqset2 !== 'undefined') {
+        eqset2 = numericValue;
+        localStorage.setItem('eqset2', eqset2.toString());
+        console.log("EventManager: Global eqset2 updated to:", eqset2);
+      } else {
+        console.warn("EventManager: Global eqset2 not found.");
+      }
+    } else {
+      console.warn("EventManager: Received non-finite value for eqsetting2 event:", value);
+    }
+  });
+
+  playlist3.on('eqsetting3', function(value) {
+    const numericValue = parseFloat(value);
+    if (isFinite(numericValue)) {
+      if (typeof eqset3 !== 'undefined') {
+        eqset3 = numericValue;
+        localStorage.setItem('eqset3', eqset3.toString());
+        console.log("EventManager: Global eqset3 updated to:", eqset3);
+      } else {
+        console.warn("EventManager: Global eqset3 not found.");
+      }
+    } else {
+      console.warn("EventManager: Received non-finite value for eqsetting3 event:", value);
+    }
+  });
+
+  playlist3.on('eqsetting4', function(value) {
+    const numericValue = parseFloat(value);
+    if (isFinite(numericValue)) {
+      if (typeof eqset4 !== 'undefined') {
+        eqset4 = numericValue;
+        localStorage.setItem('eqset4', eqset4.toString());
+        console.log("EventManager: Global eqset4 updated to:", eqset4);
+      } else {
+        console.warn("EventManager: Global eqset4 not found.");
+      }
+    } else {
+      console.warn("EventManager: Received non-finite value for eqsetting4 event:", value);
+    }
+  });
+
+  playlist3.on('eqsetting5', function(value) {
+    const numericValue = parseFloat(value);
+    if (isFinite(numericValue)) {
+      if (typeof eqset5 !== 'undefined') {
+        eqset5 = numericValue;
+        localStorage.setItem('eqset5', eqset5.toString());
+        console.log("EventManager: Global eqset5 updated to:", eqset5);
+      } else {
+        console.warn("EventManager: Global eqset5 not found.");
+      }
+    } else {
+      console.warn("EventManager: Received non-finite value for eqsetting5 event:", value);
+    }
+  });
+} else {
+  console.error("EventManager: Could not set up eqsetting listeners - playlist3 (ee3) is not available or not an event emitter at the time of listener setup.");
+}
