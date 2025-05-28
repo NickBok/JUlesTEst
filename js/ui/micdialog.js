@@ -1,3 +1,9 @@
+console.log("MicDialogStart: eqset1 type:", typeof eqset1, "value:", eqset1);
+console.log("MicDialogStart: eqset2 type:", typeof eqset2, "value:", eqset2);
+console.log("MicDialogStart: eqset3 type:", typeof eqset3, "value:", eqset3);
+console.log("MicDialogStart: eqset4 type:", typeof eqset4, "value:", eqset4);
+console.log("MicDialogStart: eqset5 type:", typeof eqset5, "value:", eqset5);
+
 var modal_mic = document.getElementById("micsetting");
 var closediv = document.getElementById("mdiv");
 
@@ -53,8 +59,8 @@ slider.oninput = function() {
 }
 
 navigator.mediaDevices.enumerateDevices()
-  .then(gotDevices)
-  .catch(errorCallback);
+    .then(gotDevices)
+    .catch(errorCallback);
 
 function gotDevices(deviceInfos) {
   for (var i = 0; i !== deviceInfos.length; ++i) {
@@ -77,9 +83,19 @@ function gotDevices(deviceInfos) {
     var idx = inputAudioList.indexOf(out);
     if (idx > -1) {
       mic.selectedIndex = idx;
+      console.log("MicDialog/gotDevices: Before startUserMedia call (path 1) - eqset1 type:", typeof eqset1, "value:", eqset1);
+      console.log("MicDialog/gotDevices: Before startUserMedia call (path 1) - eqset2 type:", typeof eqset2, "value:", eqset2);
+      console.log("MicDialog/gotDevices: Before startUserMedia call (path 1) - eqset3 type:", typeof eqset3, "value:", eqset3);
+      console.log("MicDialog/gotDevices: Before startUserMedia call (path 1) - eqset4 type:", typeof eqset4, "value:", eqset4);
+      console.log("MicDialog/gotDevices: Before startUserMedia call (path 1) - eqset5 type:", typeof eqset5, "value:", eqset5);
       startUserMedia(out);
     }
     else {
+      console.log("MicDialog/gotDevices: Before startUserMedia call (path 2) - eqset1 type:", typeof eqset1, "value:", eqset1);
+      console.log("MicDialog/gotDevices: Before startUserMedia call (path 2) - eqset2 type:", typeof eqset2, "value:", eqset2);
+      console.log("MicDialog/gotDevices: Before startUserMedia call (path 2) - eqset3 type:", typeof eqset3, "value:", eqset3);
+      console.log("MicDialog/gotDevices: Before startUserMedia call (path 2) - eqset4 type:", typeof eqset4, "value:", eqset4);
+      console.log("MicDialog/gotDevices: Before startUserMedia call (path 2) - eqset5 type:", typeof eqset5, "value:", eqset5);
       startUserMedia(inputAudioList[0]);
     }
   }
@@ -88,5 +104,5 @@ function gotDevices(deviceInfos) {
 }
 
 function errorCallback(error) {
-    console.log("error", error);
+  console.log("error", error);
 }

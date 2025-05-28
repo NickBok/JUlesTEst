@@ -3,9 +3,9 @@ var userMediaStream;
 var playlist1, playlist2;
 
 navigator.getUserMedia = (navigator.getUserMedia ||
-  navigator.webkitGetUserMedia ||
-  navigator.mozGetUserMedia ||
-  navigator.msGetUserMedia);
+    navigator.webkitGetUserMedia ||
+    navigator.mozGetUserMedia ||
+    navigator.msGetUserMedia);
 
 function gotStream(stream) {
   userMediaStream = stream;
@@ -14,7 +14,7 @@ function gotStream(stream) {
 
   playlist3.initRecorder(userMediaStream, compressionChk.checked, eqChk.checked, eqset1, eqset2, eqset3, eqset4, eqset5);
 
-  var spinprogress = document.getElementById("spinprogress");			
+  var spinprogress = document.getElementById("spinprogress");
   spinprogress.style.display = "none";
   // $(".btn-record").removeClass("disabled");
   // console.log("gotStream", compressionChk.checked, eqChk.checked);
@@ -37,13 +37,13 @@ function startUserMedia(deviceID) {
     // };
     constraints.audio.deviceId = deviceID;
   }
-    
+
 
   if (navigator.mediaDevices) {
-	if (isSafari == false)   ///04/16/23
-	{
-    navigator.mediaDevices.getUserMedia(constraints).then(gotStream).catch(logError);
-	}
+    if (isSafari == false)   ///04/16/23
+    {
+      navigator.mediaDevices.getUserMedia(constraints).then(gotStream).catch(logError);
+    }
   }
   else
   if (navigator.getUserMedia && 'MediaRecorder' in window) {
@@ -202,8 +202,8 @@ ee1.on("timeupdate", function(sec) {
   if (playbackSeconds1 > vtStart && recordstate === "playing" && voiceTrackState === false) {
     voiceTrackState = true;
     ee3.play();
-	ee1.setVolume(validatePercent100(100 - ducking)); ///WP 11/22
-	ee2.setVolume(validatePercent100(100 - ducking)); ///WP 11/22
+    ee1.setVolume(validatePercent100(100 - ducking)); ///WP 11/22
+    ee2.setVolume(validatePercent100(100 - ducking)); ///WP 11/22
   }
 
   // if (playbackSeconds1 > vtStart + leftTrackKeepTime && recordstate === "playing") {
@@ -212,7 +212,7 @@ ee1.on("timeupdate", function(sec) {
   // }
 
   var canvasdiv = document.getElementById("form1");
-  canvasdiv.innerText = curTrackName1 + "  ---  " + getHMS(curTrackLengthSeconds1 - playbackSeconds1);;  
+  canvasdiv.innerText = curTrackName1 + "  ---  " + getHMS(curTrackLengthSeconds1 - playbackSeconds1);;
   //canvasdiv.innerText += "\n";
   //canvasdiv.innerText += getHMS(curTrackLengthSeconds1 - playbackSeconds1);
 });
@@ -231,7 +231,7 @@ ee2.on("ready", function(duration) {
 
   curTrackLengthSeconds2 = duration;
   var canvasdiv = document.getElementById("form2");
-  canvasdiv.innerText = curTrackName2 + "  ---  " + getHMS(curTrackLengthSeconds2);  
+  canvasdiv.innerText = curTrackName2 + "  ---  " + getHMS(curTrackLengthSeconds2);
   canvasdiv.style.fontSize = "2.2vh";
   playbackSeconds2 = 0; ///07/2023/WP
   //canvasdiv.innerText += "\n";
@@ -239,20 +239,20 @@ ee2.on("ready", function(duration) {
 });
 
 ee2.on("timeupdate", function(sec) {
-	
+
   playbackSeconds2 = sec;	 ///06/28/2023
-	
+
   var canvasdiv = document.getElementById("form2");
-  
+
   //08/29/23 WP
   if (introTime2 > 0 && sec < introTime2)
-	{
-	  canvasdiv.innerText = getHMS(introTime2 - sec) + " :INTRO " + curTrackName2;
-	}
-	else
-	{
-		canvasdiv.innerText = curTrackName2 + "  ---  " + getHMS(sec);
-	}
+  {
+    canvasdiv.innerText = getHMS(introTime2 - sec) + " :INTRO " + curTrackName2;
+  }
+  else
+  {
+    canvasdiv.innerText = curTrackName2 + "  ---  " + getHMS(sec);
+  }
 });
 
 ee3.on("timeupdate", function(sec) {
@@ -263,14 +263,14 @@ ee3.on("timeupdate", function(sec) {
 
     var curvolume = localStorage.miclevel || 0.8;
     var fadeAudio = setInterval(function () {
-        if (curvolume > 0) {
-          curvolume -= 20;
-          ee1.setVolume(curvolume);
-        } else {
-          ee1.stop();
-          ee1.setVolume(1);
-          clearInterval(fadeAudio);
-        }
+      if (curvolume > 0) {
+        curvolume -= 20;
+        ee1.setVolume(curvolume);
+      } else {
+        ee1.stop();
+        ee1.setVolume(1);
+        clearInterval(fadeAudio);
+      }
     }, /*400*/fadetime * 1000 / 5);
   }
 });
@@ -296,11 +296,11 @@ ee3.on("voicetrackblob", function(mp3file) {
   //       }
   //     };
   //   });
-  
+
   ParsePLS(extractedFile);
   listUpdateState = false;
-  SaveExtractedFileToIndexDB(false);  
-  
+  SaveExtractedFileToIndexDB(false);
+
   // console.log("receive", mp3file, extractedFile);
 });
 
@@ -321,6 +321,46 @@ ee3.on("ready", function(duration) {
   // canvasdiv.innerText = curTrackName2;
   // canvasdiv.innerText += "\n";
   // canvasdiv.innerText += getHMS(curTrackLengthSeconds2);
+});
+
+ee3.on('audioprocess_finished_ui_reset', function() {
+  console.log("EventManager: UI reset for playlist3 (ee3) after recording completion and waveform ready.");
+
+  var recordButton = document.getElementById("recordbtn");
+  var recordLabel = document.getElementById("recordlabel");
+  var playButton = document.getElementById("playbtn"); // Play button for the recorded segment
+  var vtProcessButton = document.getElementById("vtbtn");
+  var recordFormDiv = document.getElementById("recordform");
+
+
+  if (recordstate == "playing") { // This means recording had finished and was processed
+    if (recordButton) {
+      recordButton.classList.remove("recordstop-btn");
+      recordButton.classList.add("recordstart-btn");
+      recordButton.style.display = ""; // Make record button visible again
+    }
+    if (recordLabel) {
+      recordLabel.classList.remove("recordlabel");
+      recordLabel.innerHTML = "Press HERE to Record Voice Track";
+    }
+
+    if (recordFormDiv) {
+      recordFormDiv.style.display = "none"; // Hide the waveform of the recording
+    }
+
+    if (playButton) {
+      playButton.style.display = "inline-block"; // Show play button for the new VT
+    }
+    if (vtProcessButton) {
+      vtProcessButton.style.display = "none"; // Hide the "Start VT Process" button
+    }
+
+    recordstate = "stop"; // Reset global record state
+  }
+
+  // Potentially re-enable other buttons if they were disabled during recording
+  // e.g., if playButton for main tracks (ee1, ee2) were disabled.
+  // For now, focusing on the elements directly related to the recording process area.
 });
 
 ee3.on("finish", function() {
@@ -345,12 +385,12 @@ localStorageWorker_func = function() {
         saveToLocalStorage(e.data.zipfile, e.data.localStorage);
         this.postMessage({cmd: "startLocalSave"});
         break;
-      // case 'record':
-      //   record(e.data.buffer);
-      //   break;
-      // case 'clear':
-      //   clear();
-      //   break;
+        // case 'record':
+        //   record(e.data.buffer);
+        //   break;
+        // case 'clear':
+        //   clear();
+        //   break;
     }
   };
 
@@ -361,5 +401,5 @@ localStorageWorker_func = function() {
 }
 
 localStorageWorker = localStorageWorker_func.toString().trim().match(
-	/^function\s*\w*\s*\([\w\s,]*\)\s*{([\w\W]*?)}$/
+    /^function\s*\w*\s*\([\w\s,]*\)\s*{([\w\W]*?)}$/
 )[1];

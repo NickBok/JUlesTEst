@@ -1,9 +1,10 @@
 var scriptprocessor = false;
-var eqset1 = 1;
-var eqset2 = 1;
-var eqset3 = 1;
-var eqset4 = 1;
-var eqset5 = 1;
+var eqset1 = 0.0;
+var eqset2 = 0.0;
+var eqset3 = 0.0;
+var eqset4 = 0.0;
+var eqset5 = 0.0;
+console.log("Startup: Initializing eqset1-eqset5 to default values (0.0).");
 var saveSampleVoulume = 100;
 var isSafari = false;
 
@@ -45,20 +46,45 @@ function detectBrowser() {
 }
 
 // localStorage.clear();
-if (localStorage.eqset1 != undefined)
+if (localStorage.eqset1 != undefined) {
     eqset1 = Number(localStorage.eqset1);
+    if (!isFinite(eqset1)) {
+        console.warn(`Startup: localStorage.eqset1 ('${localStorage.getItem('eqset1')}') resulted in non-finite value (${eqset1}). Resetting eqset1 to 0.0.`);
+        eqset1 = 0.0;
+    }
+}
 
-if (localStorage.eqset2 != undefined)
+if (localStorage.eqset2 != undefined) {
     eqset2 = Number(localStorage.eqset2);
+    if (!isFinite(eqset2)) {
+        console.warn(`Startup: localStorage.eqset2 ('${localStorage.getItem('eqset2')}') resulted in non-finite value (${eqset2}). Resetting eqset2 to 0.0.`);
+        eqset2 = 0.0;
+    }
+}
 
-if (localStorage.eqset3 != undefined)
+if (localStorage.eqset3 != undefined) {
     eqset3 = Number(localStorage.eqset3);
+    if (!isFinite(eqset3)) {
+        console.warn(`Startup: localStorage.eqset3 ('${localStorage.getItem('eqset3')}') resulted in non-finite value (${eqset3}). Resetting eqset3 to 0.0.`);
+        eqset3 = 0.0;
+    }
+}
 
-if (localStorage.eqset4 != undefined)
+if (localStorage.eqset4 != undefined) {
     eqset4 = Number(localStorage.eqset4);
+    if (!isFinite(eqset4)) {
+        console.warn(`Startup: localStorage.eqset4 ('${localStorage.getItem('eqset4')}') resulted in non-finite value (${eqset4}). Resetting eqset4 to 0.0.`);
+        eqset4 = 0.0;
+    }
+}
 
-if (localStorage.eqset5 != undefined)
+if (localStorage.eqset5 != undefined) {
     eqset5 = Number(localStorage.eqset5);
+    if (!isFinite(eqset5)) {
+        console.warn(`Startup: localStorage.eqset5 ('${localStorage.getItem('eqset5')}') resulted in non-finite value (${eqset5}). Resetting eqset5 to 0.0.`);
+        eqset5 = 0.0;
+    }
+}
 
 if (localStorage.saveSampleVoulume != undefined)
     saveSampleVoulume = Number(localStorage.saveSampleVoulume);
@@ -1683,11 +1709,14 @@ function mute_local_mic() {
     mixedAudioSource.mediaStream.getAudioTracks()[0].enabled = !window.local_mic_muted;
 }
 
-/* diego 20221126: moved from micdialog.js
-so audio context is available to worklets */
+/* diego 20221126: The following block was moved from micdialog.js,
+   but it's redundant as micdialog.js itself calls enumerateDevices().then(gotDevices).
+   This call is removed from startupScript.js to prevent ReferenceError
+   as gotDevices is not defined at this point of execution.
 navigator.mediaDevices.enumerateDevices()
     .then(gotDevices)
     .catch(errorCallback);
+*/
 
 <!-- added 3/12/23 -->
 document.onkeyup = function (e) {
@@ -1761,5 +1790,11 @@ target.addEventListener("drop", (event) => {
     ////11/13/2023
 
 });
+
+console.log("StartupScriptEnd: eqset1 type:", typeof eqset1, "value:", eqset1);
+console.log("StartupScriptEnd: eqset2 type:", typeof eqset2, "value:", eqset2);
+console.log("StartupScriptEnd: eqset3 type:", typeof eqset3, "value:", eqset3);
+console.log("StartupScriptEnd: eqset4 type:", typeof eqset4, "value:", eqset4);
+console.log("StartupScriptEnd: eqset5 type:", typeof eqset5, "value:", eqset5);
 
 
